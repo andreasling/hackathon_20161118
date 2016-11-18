@@ -103,12 +103,14 @@ namespace fliptris.core
             //var result = new MoveResult();
 
             //var removedParts = new List<Position>();
-            
+
 
             //result.IsGameOver = false;
             //result.RemovedParts = removedParts;
 
             //return result;
+
+            return false;
 		}
 	}
 }
