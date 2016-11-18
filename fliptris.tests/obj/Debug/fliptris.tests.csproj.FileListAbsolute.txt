@@ -1,0 +1,9 @@
+C:\Hackathon\fliptris.tests\bin\Debug\fliptris.tests.dll
+C:\Hackathon\fliptris.tests\bin\Debug\fliptris.tests.pdb
+C:\Hackathon\fliptris.tests\bin\Debug\fliptris.core.dll
+C:\Hackathon\fliptris.tests\bin\Debug\nunit.framework.dll
+C:\Hackathon\fliptris.tests\bin\Debug\fliptris.core.pdb
+C:\Hackathon\fliptris.tests\bin\Debug\nunit.framework.xml
+C:\Hackathon\fliptris.tests\obj\Debug\fliptris.tests.csprojResolveAssemblyReference.cache
+C:\Hackathon\fliptris.tests\obj\Debug\fliptris.tests.dll
+C:\Hackathon\fliptris.tests\obj\Debug\fliptris.tests.pdb
