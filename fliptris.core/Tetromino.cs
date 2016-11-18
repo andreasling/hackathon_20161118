@@ -71,8 +71,16 @@ namespace fliptris.core
 
 		public static Tetromino Spawn()
 		{
-			var r = new Random().Next(7); 
-			return tetrominos[r];
+			return Spawn(Position.Zero);
+		}
+
+		public static Tetromino Spawn(Position position)
+		{
+			var r = new Random().Next(7);
+			var proto = tetrominos[r];
+
+
+			return new Tetromino(proto.Parts, position);
 		}
 
 		public void Move(int dx, int dy)

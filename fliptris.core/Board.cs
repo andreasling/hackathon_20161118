@@ -62,7 +62,7 @@ namespace fliptris.core
 
 		public void Spawn()
 		{
-			Spawn(Tetromino.Spawn());
+			Spawn(Tetromino.Spawn(new Position(Width / 2, Height / 2)));
 		}
 
 		public void Spawn(Tetromino tetromino)
@@ -96,10 +96,9 @@ namespace fliptris.core
 
 						if (tetromino_parts[px, py] > 0)
 						{
-							if ((x < 0 || x >= Width || y < 0 || y >= Height))
+							if ((x < 0 || x >= Width || y < 0 || y >= Height) || parts[x,y] > 0)
 							{
-
-								collision = true; ;
+								collision = true;
 							}
 						}
 					}
