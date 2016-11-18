@@ -49,9 +49,14 @@ namespace fliptris.core
 			}
 		}
 
-		public void Spawn(Tetromino piece)
+		public void Spawn()
 		{
-			pieces.Add(piece);
+			Spawn(Tetromino.Spawn());
+		}
+
+		public void Spawn(Tetromino tetromino)
+		{
+			pieces.Add(tetromino);
 		}
 
 		public void Move()
