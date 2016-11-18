@@ -1,0 +1,5 @@
+/Users/andreas.ling/hackathon_20161118/fliptris.core/obj/Debug/.NETFramework,Version=v4.5.AssemblyAttribute.cs
+/Users/andreas.ling/hackathon_20161118/fliptris.core/bin/Debug/fliptris.core.dll.mdb
+/Users/andreas.ling/hackathon_20161118/fliptris.core/bin/Debug/fliptris.core.dll
+/Users/andreas.ling/hackathon_20161118/fliptris.core/obj/Debug/fliptris.core.dll
+/Users/andreas.ling/hackathon_20161118/fliptris.core/obj/Debug/fliptris.core.dll.mdb
