@@ -8,12 +8,15 @@ namespace fliptris.core
 		public int Width { get; private set; }
 		public int Height { get; private set; }
 
+		private int[,] parts;
 		private Tetromino activeTetromino = null;
 
 		public Board(int width, int height)
 		{
 			Width = width;
 			Height = height;
+
+			parts = new int[width, height];
 		}
 
 		public int[,] State
@@ -65,39 +68,63 @@ namespace fliptris.core
 		{
 			if (activeTetromino != null)
 			{
-				activeTetromino.Move(0, 1);
+				var dx = 0;
+				var dy = 1;
 
-				/* var parts = activeTetromino.Parts;
+				var tetromino_parts = activeTetromino.Parts;
 
-				for (int px = 0; px < parts.GetLength(0); px++)
+				var collision = false;
+
+				for (int px = 0; px < tetromino_parts.GetLength(0); px++)
 				{
-					var x = px + activeTetromino.Position.X;
+					var x = px + activeTetromino.Position.X + dx;
 
-					for (int py = 0; py < parts.GetLength(1); py++)
+					for (int py = 0; py < tetromino_parts.GetLength(1); py++)
 					{
-						var y = py + activeTetromino.Position.Y;
+						var y = py + activeTetromino.Position.Y + dy;
 
-						if (parts[px, py] > 0)
+						if (tetromino_parts[px, py] > 0)
 						{
-							if ((x < 0 || x >= Width))
+							if ((x < 0 || x >= Width || y < 0 || y >= Height))
 							{
-								// todo: stick
-								return false;
-							}
-							else
-							{
-								if (y < 0 || y >= Height)
-								{
-									// todo: stick
-									return false;
-								}
+								
+								collision = true;;
 							}
 						}
 					}
 				}
-				*/
-				return true;
 
+				if (collision)
+				{
+					for (int px = 0; px < tetromino_parts.GetLength(0); px++)
+					{
+						var x = px + activeTetromino.Position.X;
+
+						for (int py = 0; py < tetromino_parts.GetLength(1); py++)
+						{
+							var y = py + activeTetromino.Position.Y;
+
+							if (tetromino_parts[px, py] > 0)
+							{
+								/* if ((x < 0 || x >= Width || y < 0 || y >= Height))
+								{
+
+									collision = true; ;
+								} */
+								parts[x, y] = tetromino_parts[px, py];
+							}
+						}
+					}
+
+					return false;
+				}
+				else
+				{
+
+					activeTetromino.Move(dx, dy);
+
+					return true;
+				}
 			}
 			return false;
 		}

@@ -96,12 +96,14 @@ namespace fliptris.tests
 			board.Spawn(piece);
 
 			board.Move();
+			board.Move();
+			board.Move();
 			var couldMove = board.Move();
 
 			var state = board.State;
 
 			var expectedState = new int[,] {
-				{ 0, 1, 0, 0},
+				{ 0, 0, 0, 1},
 				{ 0, 0, 0, 0},
 				{ 0, 0, 0, 0},
 				{ 0, 0, 0, 0}
@@ -164,15 +166,23 @@ namespace fliptris.tests
 			Assert.That(newPosition.Y, Is.EqualTo(0));
 		}
 
-		[Test]
+		/* [Test]
 		public void ShouldCollideParts()
 		{
-			//Assert.That(Collide(new int[,] { { 1 } }, new int[,] { { 1 } }));
+			Assert.That(Collide(new int[,] { { 1 } }, new int[,] { { 1 } }), Is.True);
 		}
 
-		public void Collide(int[,] first, int[,] second)
+		public bool Collide(int[,] first, int[,] second)
 		{
-			
-		}
+			var x_max = Math.Max(first.GetLength(0), second.GetLength(0));
+			var y_max = Math.Max(first.GetLength(1), second.GetLength(1));
+			for (int x = 0; x < x_max; x++)
+			{
+				for (int y = 0; y < y_max; y++)
+				{
+					
+				}
+			}
+		} */
 	}
 }
