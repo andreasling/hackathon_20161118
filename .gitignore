@@ -28,3 +28,9 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+/Fliptris-Unity/Fliptris/[Ll]ibrary/
+/Fliptris-Unity/Fliptris/[Tt]emp/
+/Fliptris-Unity/Fliptris/[Oo]bj/
+/Fliptris-Unity/Fliptris/[Bb]uild/
+/Fliptris-Unity/Fliptris/[Bb]uilds/
+/Fliptris-Unity/Fliptris/Assets/AssetStoreTools*
