@@ -95,8 +95,8 @@ namespace fliptris.core
 						{
 							if ((x < 0 || x >= Width || y < 0 || y >= Height))
 							{
-								
-								collision = true;;
+
+								collision = true; ;
 							}
 						}
 					}
@@ -124,6 +124,8 @@ namespace fliptris.core
 						}
 					}
 
+					activeTetromino = null;
+
 					return false;
 				}
 				else
@@ -134,7 +136,10 @@ namespace fliptris.core
 					return true;
 				}
 			}
-
+			else
+			{
+				Spawn();
+			}
             //var result = new MoveResult();
 
             //var removedParts = new List<Position>();
