@@ -5,11 +5,10 @@ namespace fliptris.core
 {
 	public class Board
 	{
-
 		public int Width { get; private set; }
 		public int Height { get; private set; }
 
-		private List<Tetromino> pieces = new List<Tetromino>();
+		private Tetromino activeTetromino = null;
 
 		public Board(int width, int height)
 		{
@@ -23,18 +22,18 @@ namespace fliptris.core
 			{
 				var state = new int[Width, Height];
 
-				foreach (var piece in pieces)
+				if (activeTetromino != null)
 				{
-					var parts = piece.Parts;
+					var parts = activeTetromino.Parts;
 
 					for (int x = 0; x < Width; x++)
 					{
-						var px = x - piece.Position.X;
+						var px = x - activeTetromino.Position.X;
 						if (px >= 0 && px < parts.GetLength(0))
 						{
 							for (int y = 0; y < Height; y++)
 							{
-								var py = y - piece.Position.Y;
+								var py = y - activeTetromino.Position.Y;
 								if (py >= 0 && py < parts.GetLength(1))
 								{
 									state[x, y] = parts[px, py];
@@ -56,16 +55,51 @@ namespace fliptris.core
 
 		public void Spawn(Tetromino tetromino)
 		{
-			pieces.Add(tetromino);
+			if (activeTetromino == null)
+				activeTetromino = tetromino;
+			else
+				throw new InvalidOperationException();
 		}
 
-		public void Move()
+		public bool Move()
 		{
-			foreach (var piece in pieces)
+			if (activeTetromino != null)
 			{
-				//piece.Position.Y += 1;
-				piece.Move(0, 1);
+				activeTetromino.Move(0, 1);
+
+				/* var parts = activeTetromino.Parts;
+
+				for (int px = 0; px < parts.GetLength(0); px++)
+				{
+					var x = px + activeTetromino.Position.X;
+
+					for (int py = 0; py < parts.GetLength(1); py++)
+					{
+						var y = py + activeTetromino.Position.Y;
+
+						if (parts[px, py] > 0)
+						{
+							if ((x < 0 || x >= Width))
+							{
+								// todo: stick
+								return false;
+							}
+							else
+							{
+								if (y < 0 || y >= Height)
+								{
+									// todo: stick
+									return false;
+								}
+							}
+						}
+					}
+				}
+				*/
+				return true;
+
 			}
+			return false;
 		}
 	}
 }

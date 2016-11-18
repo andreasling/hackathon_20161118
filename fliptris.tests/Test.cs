@@ -58,7 +58,7 @@ namespace fliptris.tests
 		}
 
 		[Test]
-		public void ShouldMovePieces()
+		public void ShouldMoveActiveTetromino()
 		{
 			var width = 4;
 			var height = 4;
@@ -68,7 +68,7 @@ namespace fliptris.tests
 
 			board.Spawn(piece);
 
-			board.Move();
+			var couldMove = board.Move();
 
 			var state = board.State;
 
@@ -79,9 +79,37 @@ namespace fliptris.tests
 				{ 0, 0, 0, 0}
 			};
 
+			Assert.That(couldMove, Is.True);
 			Assert.That(state, Is.EqualTo(expectedState));
 		}
 
+
+		[Test]
+		public void ShouldStickActiveTetromino()
+		{
+			var width = 4;
+			var height = 4;
+			var board = new Board(width, height);
+
+			var piece = new Tetromino();
+
+			board.Spawn(piece);
+
+			board.Move();
+			var couldMove = board.Move();
+
+			var state = board.State;
+
+			var expectedState = new int[,] {
+				{ 0, 1, 0, 0},
+				{ 0, 0, 0, 0},
+				{ 0, 0, 0, 0},
+				{ 0, 0, 0, 0}
+			};
+
+			Assert.That(couldMove, Is.False);
+			Assert.That(state, Is.EqualTo(expectedState));
+		}
 
 		[Test]
 		public void ShouldCreatePiece()
@@ -134,6 +162,17 @@ namespace fliptris.tests
 			Assert.That(position.Y, Is.EqualTo(0));
 			Assert.That(newPosition.X, Is.EqualTo(1));
 			Assert.That(newPosition.Y, Is.EqualTo(0));
+		}
+
+		[Test]
+		public void ShouldCollideParts()
+		{
+			//Assert.That(Collide(new int[,] { { 1 } }, new int[,] { { 1 } }));
+		}
+
+		public void Collide(int[,] first, int[,] second)
+		{
+			
 		}
 	}
 }
