@@ -69,11 +69,8 @@ namespace fliptris.core
 
             var result = new MoveResult();
 
-            var removedParts = new List<Position>();
-            
-
             result.IsGameOver = false;
-            result.RemovedParts = removedParts;
+            result.RemovedParts = new Position[] { new Position(0, 0), new Position(1, 0) };
 
             return result;
 		}

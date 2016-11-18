@@ -1,0 +1,5 @@
+C:\Hackathon\fliptris.core\bin\Debug\fliptris.core.dll
+C:\Hackathon\fliptris.core\bin\Debug\fliptris.core.pdb
+C:\Hackathon\fliptris.core\obj\Debug\fliptris.core.csprojResolveAssemblyReference.cache
+C:\Hackathon\fliptris.core\obj\Debug\fliptris.core.dll
+C:\Hackathon\fliptris.core\obj\Debug\fliptris.core.pdb

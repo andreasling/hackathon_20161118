@@ -1,11 +1,11 @@
 fileFormatVersion: 2
 guid: a89bb993c195f6141b25390698e09000
-timeCreated: 1479502820
+timeCreated: 1479505955
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: PieceO
-    21300002: Brick
+    21300002: Brick1
     21300004: Panel
     21300006: LinesPanel
     21300008: NextPiecePanel
@@ -16,6 +16,7 @@ TextureImporter:
     21300018: PieceZ
     21300020: PieceJ
     21300022: PieceS
+    21300024: Brick2
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -78,7 +79,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Brick
+      name: Brick1
       rect:
         serializedVersion: 2
         x: 8
@@ -213,6 +214,19 @@ TextureImporter:
         serializedVersion: 2
         x: 271
         y: 113
+        width: 8
+        height: 8
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: Brick2
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 128
         width: 8
         height: 8
       alignment: 0
