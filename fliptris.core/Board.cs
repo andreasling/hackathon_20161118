@@ -47,7 +47,8 @@ namespace fliptris.core
 								var py = y - activeTetromino.Position.Y;
 								if (py >= 0 && py < parts.GetLength(1))
 								{
-									state[x, y] = parts[px, py];
+									if (parts[px, py] > 0)
+										state[x, y] = parts[px, py];
 								}
 							}
 
@@ -74,11 +75,13 @@ namespace fliptris.core
 
 		public bool Move()
 		{
+			return Move(0, 1);
+		}
+
+		public bool Move(int dx, int dy)
+		{
 			if (activeTetromino != null)
 			{
-				var dx = 0;
-				var dy = 1;
-
 				var tetromino_parts = activeTetromino.Parts;
 
 				var collision = false;
