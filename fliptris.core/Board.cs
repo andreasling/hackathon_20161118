@@ -172,8 +172,9 @@ namespace fliptris.core
 							{
 								if (y == removeRow)
 									removedParts.Add(new Position(x, y));
-								var oy = (y > removeRow) ? y + 1 : y;
-								if (oy <= Height)
+								
+								var oy = (y >= removeRow) ? y + 1 : y;
+								if (oy < Height)
 								{
 									newParts[x, y] = parts[x, oy];
 								}
@@ -206,7 +207,29 @@ namespace fliptris.core
 
 				if (removeCols.Any())
 				{
+					var removedParts = new List<Position>();
+					foreach (var removeCol in removeCols)
+					{
+						var newParts = new int[Width, Height];
 
+						for (int y = 0; y < Height; y++)
+						{
+							for (int x = 0; x < Width; x++)
+							{
+								if (x == removeCol)
+									removedParts.Add(new Position(x, y));
+								var ox = (x > removeCol) ? x + 1 : x;
+								if (oy <= Height)
+								{
+									newParts[x, y] = parts[x, oy];
+								}
+							}
+						}
+
+						parts = newParts;
+					}
+
+					return new MoveResult { IsGameOver = false, RemovedParts = removedParts, DidMove = false, GotStuck = false };
 				}
 
 
