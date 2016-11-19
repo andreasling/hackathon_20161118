@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using fliptris.core;
+using System.Linq;
 
 public class GameController : MonoBehaviour
 {
@@ -15,13 +16,20 @@ public class GameController : MonoBehaviour
     private Tile[,] tiles;
     private Board board;
     private float moveTimer = 0f;
-    private float speed = 1f;
+    private float speed = 0.75f;
+    private float speedDelta = 0f;
 
+    public new AudioSource audio;
+    public AudioClip moveSound;
+    public AudioClip stuckSound;
+    public AudioClip removalSound;
 
     public void Start ()
     {
         board = new Board(width, height);
-        
+
+        Screen.sleepTimeout = SleepTimeout.NeverSleep;
+
         tiles = new Tile[board.Width, board.Height];
 
         for (int y = 0; y < board.Height + 2; y++)
@@ -57,7 +65,7 @@ public class GameController : MonoBehaviour
         borderObject.transform.position = new Vector3(x, y, 0);
 
         var renderer = borderObject.AddComponent<SpriteRenderer>();
-
+        renderer.color = new Color(0.8f, 1, 0.3f);
         if (y % 2 == 0)
             renderer.sprite = border1;
         else
@@ -70,13 +78,51 @@ public class GameController : MonoBehaviour
 
         if (moveTimer < 0f)
         {
-            var result = board.Move();
-            moveTimer = 1f;
+            int dx = 0;
+            int dy = -1;
+
+            switch (Input.deviceOrientation)
+            {
+                case DeviceOrientation.Portrait:
+                    dx = 0;
+                    dy = -1;
+                    break;
+                case DeviceOrientation.PortraitUpsideDown:
+                    dx = 0;
+                    dy = 1;
+                    break;
+                case DeviceOrientation.LandscapeLeft:
+                    dx = -1;
+                    dy = 0;
+                    break;
+                case DeviceOrientation.LandscapeRight:
+                    dx = 1;
+                    dy = 0;
+                    break;
+            }
+
+            var result = board.Move(dx, dy);
+            moveTimer = speed - speedDelta;
+
+            if (result.DidMove)
+            {
+                audio.PlayOneShot(moveSound);
+                speedDelta += 0.01f;
+            }
+
+            if (result.GotStuck)
+            {
+                audio.PlayOneShot(stuckSound);
+                speedDelta = 0f;
+            }
 
             foreach (var removedPart in result.RemovedParts)
             {
                 tiles[removedPart.X, removedPart.Y].PlayRemovalEffect();
             }
+
+            if (result.RemovedParts.Any())
+                audio.PlayOneShot(removalSound);
 
             for (int y = 0; y < board.Height; y++)
             {

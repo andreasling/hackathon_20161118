@@ -1,20 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace fliptris.core
 {
 	public class Board
 	{
-
 		public int Width { get; private set; }
 		public int Height { get; private set; }
 
-		private List<Tetromino> pieces = new List<Tetromino>();
+		private int[,] parts;
+		private Tetromino activeTetromino = null;
 
 		public Board(int width, int height)
 		{
 			Width = width;
 			Height = height;
+
+			parts = new int[width, height];
 		}
 
 		public int[,] State
@@ -23,21 +26,30 @@ namespace fliptris.core
 			{
 				var state = new int[Width, Height];
 
-				foreach (var piece in pieces)
+				for (int x = 0; x < Width; x++)
 				{
-					var parts = piece.Parts;
+					for (int y = 0; y < Height; y++)
+					{
+						state[x, y] = parts[x, y];
+					}
+				}
+
+				if (activeTetromino != null)
+				{
+					var parts = activeTetromino.Parts;
 
 					for (int x = 0; x < Width; x++)
 					{
-						var px = x - piece.Position.X;
+						var px = x - activeTetromino.Position.X;
 						if (px >= 0 && px < parts.GetLength(0))
 						{
 							for (int y = 0; y < Height; y++)
 							{
-								var py = y - piece.Position.Y;
+								var py = y - activeTetromino.Position.Y;
 								if (py >= 0 && py < parts.GetLength(1))
 								{
-									state[x, y] = parts[px, py];
+									if (parts[px, py] > 0)
+										state[x, y] = parts[px, py];
 								}
 							}
 
@@ -51,28 +63,185 @@ namespace fliptris.core
 
 		public void Spawn()
 		{
-			Spawn(Tetromino.Spawn());
+			Spawn(Tetromino.Spawn(new Position(Width / 2, Height / 2)));
 		}
 
 		public void Spawn(Tetromino tetromino)
 		{
-			pieces.Add(tetromino);
+			if (activeTetromino == null)
+				activeTetromino = tetromino;
+			else
+				throw new InvalidOperationException();
 		}
 
 		public MoveResult Move()
 		{
-			foreach (var piece in pieces)
+			return Move(0, 1);
+		}
+
+		public MoveResult Move(int dx, int dy)
+		{
+			if (activeTetromino != null)
 			{
-				//piece.Position.Y += 1;
-				piece.Move(0, 1);
+				var tetromino_parts = activeTetromino.Parts;
+
+				var collision = false;
+
+				for (int px = 0; px < tetromino_parts.GetLength(0); px++)
+				{
+					var x = px + activeTetromino.Position.X + dx;
+
+					for (int py = 0; py < tetromino_parts.GetLength(1); py++)
+					{
+						var y = py + activeTetromino.Position.Y + dy;
+
+						if (tetromino_parts[px, py] > 0)
+						{
+							if ((x < 0 || x >= Width || y < 0 || y >= Height) || parts[x,y] > 0)
+							{
+								collision = true;
+							}
+						}
+					}
+				}
+
+				if (collision)
+				{
+					for (int px = 0; px < tetromino_parts.GetLength(0); px++)
+					{
+						var x = px + activeTetromino.Position.X;
+
+						for (int py = 0; py < tetromino_parts.GetLength(1); py++)
+						{
+							var y = py + activeTetromino.Position.Y;
+
+							if (tetromino_parts[px, py] > 0)
+							{
+								/* if ((x < 0 || x >= Width || y < 0 || y >= Height))
+								{
+
+									collision = true; ;
+								} */
+								parts[x, y] = tetromino_parts[px, py];
+							}
+						}
+					}
+
+					activeTetromino = null;
+
+					return new MoveResult { IsGameOver = false, RemovedParts = Enumerable.Empty<Position>(), DidMove = false, GotStuck = true};
+				}
+				else
+				{
+
+					activeTetromino.Move(dx, dy);
+
+					return new MoveResult { IsGameOver = false, RemovedParts = Enumerable.Empty<Position>(), DidMove = true, GotStuck = false };
+				}
+			}
+			else
+			{
+				var removeRows = new List<int>();
+
+				for (int y = 0; y < Height; y++)
+				{
+					var all = true;
+
+					for (int x = 0; x < Width; x++)
+					{
+						if (!(all &= parts[x, y] > 0))
+							break;
+					}
+
+					if (all)
+					{
+						removeRows.Add(y);
+					}
+				}
+
+				if (removeRows.Any())
+				{
+					var removedParts = new List<Position>();
+					foreach (var removeRow in removeRows)
+					{
+						var newParts = new int[Width, Height];
+
+						for (int x = 0; x < Width; x++)
+						{
+							for (int y = 0; y < Height; y++)
+							{
+								if (y == removeRow)
+									removedParts.Add(new Position(x, y));
+								
+								var oy = (y >= removeRow)
+									? y - dy //+ 1 
+									: y;
+								if (oy < Height)
+								{
+									newParts[x, y] = parts[x, oy];
+								}
+							}
+						}
+
+						parts = newParts;
+					}
+
+					return new MoveResult { IsGameOver = false,  RemovedParts = removedParts, DidMove = false, GotStuck = false };
+				}
+
+				var removeCols = new List<int>();
+
+				for (int x = 0; x < Width; x++)
+				{
+					var all = true;
+
+					for (int y = 0; y < Height; y++)
+					{
+						if (!(all &= parts[x, y] > 0))
+							break;
+					}
+
+					if (all)
+					{
+						removeCols.Add(x);
+					}
+				}
+
+				if (removeCols.Any())
+				{
+					var removedParts = new List<Position>();
+					foreach (var removeCol in removeCols)
+					{
+						var newParts = new int[Width, Height];
+
+						for (int y = 0; y < Height; y++)
+						{
+							for (int x = 0; x < Width; x++)
+							{
+								if (x == removeCol)
+									removedParts.Add(new Position(x, y));
+								var ox = (x >= removeCol) 
+									? x + dx//+ 1 
+									: x;
+								if (ox < Width)
+								{
+									newParts[x, y] = parts[ox, y];
+								}
+							}
+						}
+
+						parts = newParts;
+					}
+
+					return new MoveResult { IsGameOver = false, RemovedParts = removedParts, DidMove = false, GotStuck = false };
+				}
+
+
+				Spawn();
+				return new MoveResult { IsGameOver = false, RemovedParts = Enumerable.Empty<Position>(), DidMove = false, GotStuck = false };
 			}
 
-            var result = new MoveResult();
-
-            result.IsGameOver = false;
-            result.RemovedParts = new Position[] { new Position(0, 0), new Position(1, 0) };
-
-            return result;
+			return new MoveResult { IsGameOver = false, RemovedParts = Enumerable.Empty<Position>(), DidMove = false, GotStuck = false };
 		}
 	}
 }

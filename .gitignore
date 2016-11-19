@@ -26,7 +26,6 @@ ExportedObj/
 sysinfo.txt
 
 # Builds
-*.apk
 *.unitypackage
 /Fliptris-Unity/Fliptris/[Ll]ibrary/
 /Fliptris-Unity/Fliptris/[Tt]emp/
