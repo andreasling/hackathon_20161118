@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace fliptris.core
 {
@@ -73,12 +74,12 @@ namespace fliptris.core
 				throw new InvalidOperationException();
 		}
 
-		public bool Move()
+		public MoveResult Move()
 		{
 			return Move(0, 1);
 		}
 
-		public bool Move(int dx, int dy)
+		public MoveResult Move(int dx, int dy)
 		{
 			if (activeTetromino != null)
 			{
@@ -128,31 +129,91 @@ namespace fliptris.core
 
 					activeTetromino = null;
 
-					return false;
+					return new MoveResult { IsGameOver = false, RemovedParts = Enumerable.Empty<Position>() };
 				}
 				else
 				{
 
 					activeTetromino.Move(dx, dy);
 
-					return true;
+					return new MoveResult { IsGameOver = false, RemovedParts = Enumerable.Empty<Position>() };
 				}
 			}
 			else
 			{
+				var removeRows = new List<int>();
+
+				for (int y = 0; y < Height; y++)
+				{
+					var all = true;
+
+					for (int x = 0; x < Width; x++)
+					{
+						if (!(all &= parts[x, y] > 0))
+							break;
+					}
+
+					if (all)
+					{
+						removeRows.Add(y);
+					}
+				}
+
+				if (removeRows.Any())
+				{
+					var removedParts = new List<Position>();
+					foreach (var removeRow in removeRows)
+					{
+						var newParts = new int[Width, Height];
+
+						for (int x = 0; x < Width; x++)
+						{
+							for (int y = 0; y < Height; y++)
+							{
+								var oy = (y > removeRow) ? y + 1 : y;
+								if (oy < Height)
+								{
+									removedParts.Add(new Position(x,y));
+									newParts[x, y] = parts[x, oy];
+								}
+							}
+						}
+
+						parts = newParts;
+					}
+
+					return new MoveResult { IsGameOver = false,  RemovedParts = removedParts };
+				}
+
+				var removeCols = new List<int>();
+
+				for (int x = 0; x < Width; x++)
+				{
+					var all = true;
+
+					for (int y = 0; y < Height; y++)
+					{
+						if (!(all &= parts[x, y] > 0))
+							break;
+					}
+
+					if (all)
+					{
+						removeCols.Add(x);
+					}
+				}
+
+				if (removeCols.Any())
+				{
+
+				}
+
+
 				Spawn();
+				return new MoveResult { IsGameOver = false, RemovedParts = Enumerable.Empty<Position>() };
 			}
-            //var result = new MoveResult();
 
-            //var removedParts = new List<Position>();
-
-
-            //result.IsGameOver = false;
-            //result.RemovedParts = removedParts;
-
-            //return result;
-
-            return false;
+			return new MoveResult { IsGameOver = false, RemovedParts = Enumerable.Empty<Position>() };
 		}
 	}
 }
