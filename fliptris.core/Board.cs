@@ -221,7 +221,7 @@ namespace fliptris.core
 								if (x == removeCol)
 									removedParts.Add(new Position(x, y));
 								var ox = (x >= removeCol) 
-									? x - dx//+ 1 
+									? x + dx//+ 1 
 									: x;
 								if (ox < Width)
 								{
