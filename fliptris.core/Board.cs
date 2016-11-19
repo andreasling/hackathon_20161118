@@ -129,14 +129,14 @@ namespace fliptris.core
 
 					activeTetromino = null;
 
-					return new MoveResult { IsGameOver = false, RemovedParts = Enumerable.Empty<Position>() };
+					return new MoveResult { IsGameOver = false, RemovedParts = Enumerable.Empty<Position>(), DidMove = false, GotStuck = true};
 				}
 				else
 				{
 
 					activeTetromino.Move(dx, dy);
 
-					return new MoveResult { IsGameOver = false, RemovedParts = Enumerable.Empty<Position>() };
+					return new MoveResult { IsGameOver = false, RemovedParts = Enumerable.Empty<Position>(), DidMove = true, GotStuck = false };
 				}
 			}
 			else
@@ -182,7 +182,7 @@ namespace fliptris.core
 						parts = newParts;
 					}
 
-					return new MoveResult { IsGameOver = false,  RemovedParts = removedParts };
+					return new MoveResult { IsGameOver = false,  RemovedParts = removedParts, DidMove = false, GotStuck = false };
 				}
 
 				var removeCols = new List<int>();
@@ -210,10 +210,10 @@ namespace fliptris.core
 
 
 				Spawn();
-				return new MoveResult { IsGameOver = false, RemovedParts = Enumerable.Empty<Position>() };
+				return new MoveResult { IsGameOver = false, RemovedParts = Enumerable.Empty<Position>(), DidMove = false, GotStuck = false };
 			}
 
-			return new MoveResult { IsGameOver = false, RemovedParts = Enumerable.Empty<Position>() };
+			return new MoveResult { IsGameOver = false, RemovedParts = Enumerable.Empty<Position>(), DidMove = false, GotStuck = false };
 		}
 	}
 }
