@@ -173,7 +173,9 @@ namespace fliptris.core
 								if (y == removeRow)
 									removedParts.Add(new Position(x, y));
 								
-								var oy = (y >= removeRow) ? y + 1 : y;
+								var oy = (y >= removeRow)
+									? y - dy //+ 1 
+									: y;
 								if (oy < Height)
 								{
 									newParts[x, y] = parts[x, oy];
@@ -218,7 +220,9 @@ namespace fliptris.core
 							{
 								if (x == removeCol)
 									removedParts.Add(new Position(x, y));
-								var ox = (x >= removeCol) ? x + 1 : x;
+								var ox = (x >= removeCol) 
+									? x - dx//+ 1 
+									: x;
 								if (ox < Width)
 								{
 									newParts[x, y] = parts[ox, y];
