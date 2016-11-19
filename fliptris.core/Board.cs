@@ -170,10 +170,11 @@ namespace fliptris.core
 						{
 							for (int y = 0; y < Height; y++)
 							{
+								if (y == removeRow)
+									removedParts.Add(new Position(x, y));
 								var oy = (y > removeRow) ? y + 1 : y;
-								if (oy < Height)
+								if (oy <= Height)
 								{
-									removedParts.Add(new Position(x,y));
 									newParts[x, y] = parts[x, oy];
 								}
 							}
